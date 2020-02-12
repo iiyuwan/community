@@ -4,46 +4,64 @@
     <title>Welcome to Juice Community</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="css/bootstrap.css">
-
     <link rel="stylesheet" href="css/bootstrap-theme.css">
-
+    <link rel="stylesheet" href="css/index.css">
 </head>
-<body>
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-
-            <a class="navbar-brand" href="#">
-              Juice Community
-            </a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-
-            <form class="navbar-form navbar-left">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="搜索问题...">
+<body style="background: #efefaa">
+<div th:insert="~{navigation::navigation}"></div>
+<div class="container-fluid"  style="margin:25px;background: white">
+    <div class="row" style="background: white" >
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12"  >
+            <h2 ><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>发现</h2>
+            <div class="media" th:each="question:${pages.questionDTOList}">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object" th:src="${question.user.avatar_url}"   alt="avatar" style="width: 38px;height: 38px;border-radius: 5px">
+                    </a>
                 </div>
+                <div class="media-body" >
+                    <h4 class="media-heading" th:text="${question.title}">问题标题</h4>
+                    <span th:text="${question.description}"></span>
+                    <span th:text="${question.tag}"></span><br/>
+                    <span style="color: #666;font-size: 11px"><span th:text="${question.comment_count}"></span>个回复•<span th:text="${question.review_count}"></span>次浏览•<span th:text="${#dates.format(question.gmt_create,'yyyy/MM/dd')}"></span></span>
+                </div>
+            </div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li  th:if="${pages.showFirst}">
+                        <a th:href="@{/(page=1)}" aria-label="First" ><!--跳到第一页-->
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li  th:if="${pages.showPre}">
+                        <a th:href="@{/(page=${pages.curPage}-1)}" aria-label="Previous" ><!--跳到上一页-->
+                            <span aria-hidden="true">&lsaquo;</span>
+                        </a>
+                    </li>
+                    <li  th:each="page:${pages.pages}" th:class="${pages.curPage==page}?'active':''">
+                        <a th:href="@{/(page=${page})}" th:text="${page}" >
+                        </a>
+                    </li>
+                    <li th:if="${pages.showNext}"><!--跳到下一页-->
+                        <a  th:href="@{/(page=${pages.curPage}+1)}" aria-label="Next">
+                            <span aria-hidden="true">&rsaquo;</span>
+                        </a>
+                    </li>
+                    <li th:if="${pages.showEnd}"><!--跳到最后一页-->
+                        <a th:href="@{/(page=${pages.totalPage})}" aria-label="End">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" >
+            <h3>热门话题</h3>
+            <h3>热门应用</h3>
+        </div>
+    </div>
+</div>
 
-            </form>
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown" th:if="${session.user!=null}">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" th:text="${session.user.getName()}"><span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">消息中心</a></li>
-                        <li><a href="#">个人中心</a></li>
-                        <li><a href="#">退出登录</a></li>
-
-                    </ul>
-                </li>
-                <li th:if="${session.user==null}"><a href="https://github.com/login/oauth/authorize?client_id=a8752f093048b522143f&redirect_uri=http://localhost:8080/callback&scope=user&state=1">登录</a></li>
-
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
 
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>

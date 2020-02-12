@@ -1,58 +1,14 @@
 package com.juice.community.model;
 
+import lombok.Data;
+
+@Data  /*自动生成getter和setter方法*/
 public class User {
     private int id;
-    private String name;
     private String account_id;
-    private String state;//token验证是否存在用户
+    private String name;
+    private String token;//token验证是否存在用户
     private long gmt_create;
     private long gmt_modified;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAccount_id() {
-        return account_id;
-    }
-
-    public void setAccount_id(String account_id) {
-        this.account_id = account_id;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public long getGmt_create() {
-        return gmt_create;
-    }
-
-    public void setGmt_create(long gmt_create) {
-        this.gmt_create = gmt_create;
-    }
-
-    public long getGmt_modified() {
-        return gmt_modified;
-    }
-
-    public void setGmt_modified(long gmt_modified) {
-        this.gmt_modified = gmt_modified;
-    }
+    private String avatar_url;
 }
