@@ -5,3 +5,11 @@
 #mainbackground{
     background: #efefef;
 }
+.mylink{
+    color: #666;
+    font-size: 11px;
+    text-decoration: none;
+}
+.mylink:hover{
+    color: #2aabd2;
+}

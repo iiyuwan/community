@@ -22,7 +22,7 @@ import java.util.List;
 public class IndexController {
     @Autowired(required = false)
     private UserMapper userMapper;
-    @Autowired
+    @Autowired(required = false)
     private QuestionService questionService;
     @GetMapping("/")
     public String index(Model model,
