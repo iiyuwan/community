@@ -23,4 +23,14 @@
     set  review_count =review_count+ #{review_count,jdbcType=INTEGER}
     where id=#{id}
   </update>
+  <update id="addCommentCount" parameterType="com.juice.community.model.Question">
+    update question
+    set   comment_count=comment_count+ #{comment_count,jdbcType=INTEGER}
+    where id=#{id}
+  </update>
+  <!--查询相关推荐问题 主要是tag含有相同的--> <!--parameterType是传入的参数类型-->
+  <select id="selectRelatedQuestion" parameterType="com.juice.community.model.Question" resultMap="BaseResultMap">
+    select * from question where id!=#{id} and tag regexp #{tag}
+  </select>
+
 </mapper>

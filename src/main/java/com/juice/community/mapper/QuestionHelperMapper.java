@@ -9,5 +9,7 @@ import java.util.List;
 
 public interface QuestionHelperMapper {
 
-    int addReviewCount(Question record);
+    void addReviewCount(Question record);
+    void addCommentCount(Question question);//对某个问题增加回复数
+    List<Question> selectRelatedQuestion(Question question);//模糊搜索 含有tag的相关题目
 }

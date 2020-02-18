@@ -14,7 +14,7 @@
 
         </plugin>
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
-                        connectionURL="jdbc:mysql:///springboot?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false"
+                        connectionURL="jdbc:mysql:///springboot?useUnicode=true&amp;characterEncoding=utf-8&amp;allowMultiQueries=true&amp;useSSL=false"
                         userId="root"
                         password="123456">
             <property name="nullCatalogMeansCurrent" value="true"/>
@@ -41,6 +41,9 @@
             <property name="useActualColumnNames" value="true"/><!--根据数据库名生成属性 设置为false就会用驼峰命名生成属性-->
         </table>
         <table tableName="question" domainObjectName="Question" >
+            <property name="useActualColumnNames" value="true"/><!--根据数据库名生成属性 设置为false就会用驼峰命名生成属性-->
+        </table>
+        <table tableName="comment" domainObjectName="Comment" >
             <property name="useActualColumnNames" value="true"/><!--根据数据库名生成属性 设置为false就会用驼峰命名生成属性-->
         </table>
     </context>

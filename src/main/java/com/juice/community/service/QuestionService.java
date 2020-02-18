@@ -10,13 +10,16 @@ import com.juice.community.mapper.UserMapper;
 import com.juice.community.model.Question;
 import com.juice.community.model.QuestionExample;
 import com.juice.community.model.User;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -36,7 +39,9 @@ public class QuestionService {
         pageDTO.setPage(totalPage,page);
         Integer offset=size*(page-1);
        // List<Question> questionList = questionMapper.getQuestionList(offset,size);
-        List<Question> questionList= questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
+        QuestionExample example1=new QuestionExample();
+        example1.setOrderByClause("gmt_create desc");
+        List<Question> questionList= questionMapper.selectByExampleWithRowbounds(example1, new RowBounds(offset, size));
         List<QuestionDTO>questionDTOList=new ArrayList<>();
         for (Question question : questionList) {
          User user=  userMapper.selectByPrimaryKey(question.getCreator());
@@ -49,7 +54,7 @@ public class QuestionService {
         return pageDTO;
     }
     //根据userID来查找他发表了多少问题
-    public PageDTO getQuestionListByUser(int userId, Integer page, Integer size) {
+    public PageDTO getQuestionListByUser(Long userId, Integer page, Integer size) {
         PageDTO pageDTO=new PageDTO();
         QuestionExample example=new QuestionExample();
         example.createCriteria().andCreatorEqualTo(userId);
@@ -59,10 +64,11 @@ public class QuestionService {
         else totalPage=totalCount/size+1;//计算他一共有多少页
         pageDTO.setPage(totalPage,page);//根据当前页码来设置要展示的页码
         Integer offset=size*(page-1);
-       // List<Question> questionList = questionMapper.getQuestionListByUser(userId,offset,size);
-        QuestionExample example2=new QuestionExample();
+
         example.createCriteria().andCreatorEqualTo(userId);
-        List<Question> questionList= questionMapper.selectByExampleWithRowbounds(example2, new RowBounds(offset, size));
+        QuestionExample example1=new QuestionExample();
+        example1.setOrderByClause("gmt_create desc");
+        List<Question> questionList= questionMapper.selectByExampleWithRowbounds(example1, new RowBounds(offset, size));
         List<QuestionDTO>questionDTOList=new ArrayList<>();
         for (Question question : questionList) {
             User user=  userMapper.selectByPrimaryKey(question.getCreator());
@@ -75,7 +81,7 @@ public class QuestionService {
         return pageDTO;
     }
 
-    public QuestionDTO getQuestionById(Integer id) {
+    public QuestionDTO getQuestionById(Long id) {
         Question question=questionMapper.selectByPrimaryKey(id);
         if(question==null){
             throw  new CustomException(ECustomErrorCode.QUESTION_NOT_FOUND);
@@ -89,7 +95,12 @@ public class QuestionService {
 
     public void createOrUpdate(Question question) {
         if(question.getId()==null){
+
+            question.setGmt_create(System.currentTimeMillis());
             question.setGmt_modified(question.getGmt_create());
+            question.setReview_count(0);
+            question.setLike_count(0);
+            question.setComment_count(0);
             questionMapper.insert(question);
         }else {
             Question updateQues=new Question();
@@ -106,11 +117,33 @@ public class QuestionService {
         }
     }
 
-    public void addReviewCount(Integer id) {
+    public void addReviewCount(Long id) {
 
         Question updateQue=new Question();
          updateQue.setId(id);
          updateQue.setReview_count(1);
         questionHelperMapper.addReviewCount(updateQue);
+    }
+
+    public List<QuestionDTO> selectRelatedQuestion(QuestionDTO questionDTO) {
+        if(StringUtils.isBlank(questionDTO.getTag())){
+            //标签为空
+            return new ArrayList<>();
+        }else{
+            String[] tags = StringUtils.split(questionDTO.getTag(), "-");//得到所有标签
+            String regTag = Arrays.stream(tags).collect(Collectors.joining("|"));//按|拼接成正则表达式的格式：tag1|tag2|tag3
+            Question question=new Question();
+            question.setId(questionDTO.getId());
+            question.setTag(regTag);
+            List<Question> relatedQuestion = questionHelperMapper.selectRelatedQuestion(question);//得到相关问题
+           List<QuestionDTO>relatedQuestionDTO= relatedQuestion.stream().map(q->{  //把question转换为questionＤＴＯ
+               QuestionDTO temp = new QuestionDTO();
+               BeanUtils.copyProperties(q,temp);
+               return temp;
+            }).collect(Collectors.toList());
+
+            return relatedQuestionDTO;
+        }
+
     }
 }

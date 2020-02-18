@@ -1,15 +1,51 @@
-.navbar-brand img{
+.navbar-brand img {
     padding: 0;
     height: 50px;
 }
-#mainbackground{
+
+#mainbackground {
     background: #efefef;
 }
-.mylink{
+
+.mylink {
     color: #666;
     font-size: 11px;
     text-decoration: none;
 }
-.mylink:hover{
+.mycolor{
     color: #2aabd2;
+
+}
+.mylink:hover {
+    color: #155faa;
+    cursor: pointer;
+    text-decoration: none;
+}
+/*头像*/
+.myAvatar{
+    width:38px;
+    height: 38px;
+    border-radius: 5px;
+}
+.commentName{
+    font-size: 12px;
+    color: #666;
+}
+.commentTime{
+    float: right;
+}
+.mediaBody{
+    padding-top: 5px;
+}
+ul{
+  list-style: none;
+    padding-left: 2px;
+}
+.myTag:hover{
+    cursor: pointer;
+}
+.myNote:hover{
+    color: #2aabd2;
+    background: #f2dede;
+    cursor: pointer;;
 }

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class ProfileController {
-    @Autowired
+    @Autowired(required = false)
     private QuestionService questionService;
     @GetMapping("/profile/{action}") /*访问profile会调用此方法*/
     public String profile(@PathVariable(name="action") String action, Model model, HttpServletRequest request,
