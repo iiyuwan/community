@@ -40,7 +40,8 @@
 
                             </ul>
                         </li>
-                        <li th:if="${session.user==null}"><a href="https://github.com/login/oauth/authorize?client_id=a8752f093048b522143f&redirect_uri=http://localhost:8080/callback&scope=user&state=1" style="color: white">登录</a></li>
+                        <li th:if="${session.user==null}"><a th:href="@{https://github.com/login/oauth/authorize(client_id='a8752f093048b522143f',redirect_uri=${#httpServletRequest.getRequestURL()+'callback'},scope='user',state=1)}"
+                               style="color: white">登录</a></li>
 
                     </ul>
                 </div><!-- /.navbar-collapse -->

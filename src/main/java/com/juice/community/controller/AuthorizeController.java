@@ -6,6 +6,7 @@ import com.juice.community.mapper.UserMapper;
 import com.juice.community.model.User;
 import com.juice.community.provider.GithubProvider;
 import com.juice.community.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 @Controller
+@Slf4j
 public class AuthorizeController {
     @Autowired(required = false)
     private UserService userService;
@@ -59,6 +61,7 @@ public class AuthorizeController {
             return "redirect:/";//登录成功跳转到index界面
         }else{
             //登录失败
+            log.error("callback get github error {}",githubUser);
             return "redirect:/";//返回index界面
         }
 
