@@ -1,0 +1,18 @@
+2020-02-20 18:28:20.943  INFO 14500 --- [restartedMain] c.juice.community.CommunityApplication   : Starting CommunityApplication on DESKTOP-KT7A802 with PID 14500 (F:\JavaLearn\SpringbootPro\target\classes started by Juice in F:\JavaLearn\SpringbootPro)
+2020-02-20 18:28:20.949  INFO 14500 --- [restartedMain] c.juice.community.CommunityApplication   : No active profile set, falling back to default profiles: default
+2020-02-20 18:28:21.045  INFO 14500 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-02-20 18:28:21.046  INFO 14500 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-02-20 18:28:25.493  INFO 14500 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2020-02-20 18:28:25.560  INFO 14500 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-02-20 18:28:25.562  INFO 14500 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.30]
+2020-02-20 18:28:25.567  INFO 14500 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : Loaded APR based Apache Tomcat Native library [1.2.23] using APR version [1.7.0].
+2020-02-20 18:28:25.568  INFO 14500 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true].
+2020-02-20 18:28:25.568  INFO 14500 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+2020-02-20 18:28:25.611  INFO 14500 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : OpenSSL successfully initialized [OpenSSL 1.1.1c  28 May 2019]
+2020-02-20 18:28:25.903  INFO 14500 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-02-20 18:28:25.904  INFO 14500 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 4857 ms
+2020-02-20 18:28:26.994  INFO 14500 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-02-20 18:28:27.075  INFO 14500 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2020-02-20 18:28:27.360  INFO 14500 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-02-20 18:28:28.116  INFO 14500 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2020-02-20 18:28:28.179  INFO 14500 --- [restartedMain] c.juice.community.CommunityApplication   : Started CommunityApplication in 8.217 seconds (JVM running for 10.723)

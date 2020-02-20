@@ -2,6 +2,7 @@ package com.juice.community.interceptor;
 import com.juice.community.mapper.UserMapper;
 import com.juice.community.model.User;
 import com.juice.community.model.UserExample;
+import com.juice.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -14,6 +15,8 @@ import java.util.List;
 public class SessionInterceptor implements HandlerInterceptor {
     @Autowired(required = false)
     private UserMapper userMapper;
+    @Autowired(required = false)
+    private NotificationService notificationService;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Cookie[] cookies = request.getCookies();
@@ -26,6 +29,8 @@ public class SessionInterceptor implements HandlerInterceptor {
                     List<User> users = userMapper.selectByExample(userExample);
                     if(users.size()!=0){
                         request.getSession().setAttribute("user",users.get(0));
+                        Long unreadCount=notificationService.unreadCount(users.get(0).getId());
+                        request.getSession().setAttribute("unreadCount",unreadCount);
                     }
                     break;
                 }

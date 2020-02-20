@@ -6,9 +6,32 @@
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.css">
     <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/editormd.preview.css"/>
+    <link rel="stylesheet" href="/css/editormd.css"/>
+    <link rel="stylesheet" href="/css/editormd.logo.css"/>
+
+
     <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script src="/js/editormd.js"></script>
+    <script src="/lib/marked.min.js"></script>
+    <script src="/lib/prettify.min.js"></script>
     <script src="/js/bootstrap.js" type="application/javascript"></script>
     <script src="/js/community.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            var editor = editormd("question-editor", {
+                width  : "100%",
+                 height : "350px",
+                path   : "/lib/",
+                delay:0,
+                placeholder:"请输入问题描述...",
+                imageUpload:true, //开启图片上传功能
+                imageFormats:["jpg","jpeg","gif","png","bmp","webp"],
+                imageUploadURL:"/file/upload"
+            });
+        });
+    </script>
+
 
 </head>
 <body style="background: #efefaa">
@@ -24,10 +47,11 @@
                     <input type="text" class="form-control" name="title" id="title" placeholder="问题标题..."
                            autocomplete="off" th:value="${title}">
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="question-editor">
                     <label for="description">问题补充(必填，请参照右侧提示):</label>
                     <textarea name="description" id="description" class="form-control" rows="10"
-                              th:text="${description}"></textarea>
+                              th:text="${description}" style="display: none"></textarea>
+
                 </div>
                 <div class="form-group">
                     <label for="tag">添加标签:</label>
@@ -39,17 +63,25 @@
                     <div>
                         <!-- 标签导航栏 -->
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation"  th:each="tab,tabStat:${tags}" th:class="${tabStat.first?'active':''}">
-                                <a th:href="${'#'+tab.tabName}" aria-controls="home" role="tab" data-toggle="tab" th:text="${tab.tabName}"> </a>
+                            <li role="presentation" th:each="tab,tabStat:${tags}"
+                                th:class="${tabStat.first?'active':''}">
+                                <a th:href="${'#'+tab.tabName}" aria-controls="home" role="tab" data-toggle="tab"
+                                   th:text="${tab.tabName}"> </a>
                             </li>
                         </ul>
                         <!-- 标签-->
                         <div class="tab-content">
-                            <div role="tabpanel"  th:id="${tab.tabName}" style="padding-top: 5px" th:each="tab,tabStat:${tags}" th:class="${tabStat.first?'active tab-pane':'tab-pane '}">
-                                <span >
-                                    <span class="label label-info myTag" style="white-space: normal;display: inline-block;margin: 5px 3px;padding: 8px" th:each="selecTag:${tab.tags}" onclick="selectTag(this)" th:data-tag="${selecTag}">
+                            <div role="tabpanel" th:id="${tab.tabName}" style="padding-top: 5px"
+                                 th:each="tab,tabStat:${tags}"
+                                 th:class="${tabStat.first?'active tab-pane':'tab-pane '}">
+                                <span>
+                                    <span class="label label-info myTag"
+                                          style="white-space: normal;display: inline-block;margin: 5px 3px;padding: 8px"
+                                          th:each="selecTag:${tab.tags}" onclick="selectTag(this)"
+                                          th:data-tag="${selecTag}">
                                           <span class="glyphicon glyphicon-tags" aria-hidden="true">
-                                              <span class="label label-info" style="padding: 0px;margin-left: -5px" th:text="${selecTag}"></span>
+                                              <span class="label label-info" style="padding: 0px;margin-left: -5px"
+                                                    th:text="${selecTag}"></span>
                                           </span>
                                     </span>
                                 </span>

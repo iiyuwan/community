@@ -46,5 +46,8 @@
         <table tableName="comment" domainObjectName="Comment" >
             <property name="useActualColumnNames" value="true"/><!--根据数据库名生成属性 设置为false就会用驼峰命名生成属性-->
         </table>
+        <table tableName="notification" domainObjectName="Notification" >
+            <property name="useActualColumnNames" value="true"/><!--根据数据库名生成属性 设置为false就会用驼峰命名生成属性-->
+        </table>
     </context>
 </generatorConfiguration>

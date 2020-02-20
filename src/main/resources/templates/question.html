@@ -7,8 +7,17 @@
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.css">
     <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/editormd.preview.css"/>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+    <script src="/js/editormd.js"></script>
+    <script src="/lib/marked.min.js"></script>
+    <script src="/lib/prettify.min.js"></script>
+    <script src="/js/bootstrap.js" ></script>
     <script src="/js/moment.js"></script>
     <script src="/js/community.js"></script>
+
+
 
 </head>
 <body style="background: #efefaa">
@@ -26,8 +35,16 @@
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12"/>
                 <br/>
                 <!--问题详情-->
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:text="${question.description}" >
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="question-view"  >
+                    <textarea  style="display: none" th:text="${question.description}"></textarea>
                 </div>
+
+                <script type="text/javascript">
+                    $(function() {
+                       editormd.markdownToHTML("question-view", {});
+                    });
+                </script>
+
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12"/>
                 <br/>
                 <!--标签-->
@@ -62,9 +79,10 @@
                         <br/>
                         <span>
                                  <span class="glyphicon glyphicon-thumbs-up mylink"
-                                       aria-hidden="true"></span>&nbsp;<span th:text="${comment.like_count}"></span>
+                                       aria-hidden="true"></span>&nbsp;<span th:text="${comment.like_count}">0</span>
                                   <span class="glyphicon glyphicon-comment mylink" aria-hidden="true"
-                                        th:data-id="${comment.id}" onclick="collapseSubComment(this)" ></span> <span th:text="${comment.comment_count}"></span>&nbsp;
+                                        th:data-id="${comment.id}" onclick="collapseSubComment(this)" ></span>
+                            <span th:text="${comment.comment_count}">0</span>&nbsp;
 
                             <span th:text="${#dates.format(comment.gmt_create,'yyyy/MM/dd')}"
                                   style="float: right"></span>
@@ -93,12 +111,12 @@
                     <div class="media" style="margin-bottom: 5px">
                         <div class="media-left">
                             <a href="#">
-                                <img class="media-object" th:src="${question.user.avatar_url}" alt="avatar"
+                                <img class="media-object" th:src="${session.user!=null?session.user.avatar_url:'/images/defaultAvatar.png'}" alt="avatar"
                                      style="width: 38px;height: 38px;border-radius: 5px">
                             </a>
                         </div>
                         <div class="media-body" style="padding-top: 5px">
-                            <span th:text="${question.user.name}"></span>
+                            <span th:text="${session.user!=null?session.user.name:'匿名用户'}"></span>
                         </div>
                     </div>
                     <textarea class="form-control" rows="10" id="replyContent"></textarea>
@@ -138,11 +156,10 @@
             </div>
           <!--hr-->  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0"> <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12"/></div>
            <div style="padding-left: 17px">
-               <img src="/img/logo.png" alt="..." class="img-thumbnail" style="width: 100%">
+               <img src="/images/logo.png" alt="..." class="img-thumbnail" style="width: 100%">
            </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
-    <script src="/js/bootstrap.js" type="application/javascript"></script>
+
 </body>
 </html>

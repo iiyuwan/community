@@ -4,6 +4,7 @@ import com.juice.community.dto.CommentGetDTO;
 import com.juice.community.dto.ResultDTO;
 import com.juice.community.enums.CommentTypeEnum;
 import com.juice.community.exception.ECustomErrorCode;
+import com.juice.community.mapper.NotificationMapper;
 import com.juice.community.model.Comment;
 import com.juice.community.model.User;
 import com.juice.community.service.CommentService;
@@ -18,14 +19,14 @@ import java.util.List;
 public class CommentController {
     @Autowired(required = false)
     private CommentService commentService;
+
+
     @RequestMapping(value = "/comment", method= RequestMethod.POST)
     @ResponseBody
     public Object post(@RequestBody CommentDTO commentDTO, HttpServletRequest request){
         User user = (User)request.getSession().getAttribute("user");
-        System.out.println("user = " + user);
         if(user==null) {
           return ResultDTO.causeBy(ECustomErrorCode.COMMENT_NOT_LOGIN);
-
         }
         if(commentDTO==null|| StringUtils.isBlank(commentDTO.getContent())){
             return ResultDTO.causeBy(ECustomErrorCode.CONTENT_IS_EMPTY);
@@ -38,7 +39,8 @@ public class CommentController {
         comment.setGmt_create(System.currentTimeMillis());
         comment.setGmt_modified(comment.getGmt_create());
         comment.setLike_count(0L);
-        commentService.insert(comment);
+        comment.setComment_count(0L);
+        commentService.insert(comment,user);
         return ResultDTO.successOf();
     }
    //展示子评论

@@ -32,5 +32,23 @@
   <select id="selectRelatedQuestion" parameterType="com.juice.community.model.Question" resultMap="BaseResultMap">
     select * from question where id!=#{id} and tag regexp #{tag}
   </select>
+  <select id="countByKeyWords" parameterType="com.juice.community.dto.QuestionQueryDTO" resultType="java.lang.Integer">
+       select count(*) from question
+    <where>
+       <if test="keyStr!=null">
+          and title regexp #{keyStr}
+       </if>
+    </where>
+  </select>
+
+  <select id="selectByKeyWords" parameterType="com.juice.community.dto.QuestionQueryDTO" resultMap="BaseResultMap">
+    select * from question
+    <where>
+      <if test="keyStr!=null">
+        and title regexp #{keyStr}
+      </if>
+    </where>
+    order by gmt_create desc limit #{page},#{size}
+  </select>
 
 </mapper>

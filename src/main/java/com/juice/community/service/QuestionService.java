@@ -2,6 +2,7 @@ package com.juice.community.service;
 
 import com.juice.community.dto.PageDTO;
 import com.juice.community.dto.QuestionDTO;
+import com.juice.community.dto.QuestionQueryDTO;
 import com.juice.community.exception.CustomException;
 import com.juice.community.exception.ECustomErrorCode;
 import com.juice.community.mapper.QuestionHelperMapper;
@@ -29,10 +30,19 @@ public class QuestionService {
     private QuestionMapper questionMapper;
     @Autowired(required = false)
     private QuestionHelperMapper questionHelperMapper;
+
     //查询所有人发布了的问题
-    public PageDTO getQuestionList(Integer page, Integer size) {
-        PageDTO pageDTO=new PageDTO();
-        Integer totalCount = (int)questionMapper.countByExample(new QuestionExample());
+    public PageDTO getQuestionList(String keyStr, Integer page, Integer size) {
+        if(StringUtils.isNotBlank(keyStr)){
+            String[] keywords = StringUtils.split(keyStr, " ");
+            keyStr=Arrays.stream(keywords).collect(Collectors.joining("|"));
+        }
+        PageDTO<QuestionDTO> pageDTO=new PageDTO<>();
+
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+        questionQueryDTO.setKeyStr(keyStr);
+
+        Integer totalCount = (int)questionHelperMapper.countByKeyWords(questionQueryDTO);
         Integer totalPage=0;
         if(totalCount%size==0) totalPage=totalCount/size;
         else totalPage=totalCount/size+1;
@@ -41,7 +51,9 @@ public class QuestionService {
        // List<Question> questionList = questionMapper.getQuestionList(offset,size);
         QuestionExample example1=new QuestionExample();
         example1.setOrderByClause("gmt_create desc");
-        List<Question> questionList= questionMapper.selectByExampleWithRowbounds(example1, new RowBounds(offset, size));
+        questionQueryDTO.setPage(offset);
+        questionQueryDTO.setSize(size);
+        List<Question> questionList= questionHelperMapper.selectByKeyWords(questionQueryDTO);
         List<QuestionDTO>questionDTOList=new ArrayList<>();
         for (Question question : questionList) {
          User user=  userMapper.selectByPrimaryKey(question.getCreator());
@@ -50,12 +62,12 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }
-        pageDTO.setQuestionDTOList(questionDTOList);
+        pageDTO.setData(questionDTOList);
         return pageDTO;
     }
     //根据userID来查找他发表了多少问题
     public PageDTO getQuestionListByUser(Long userId, Integer page, Integer size) {
-        PageDTO pageDTO=new PageDTO();
+        PageDTO<QuestionDTO> pageDTO=new PageDTO<>();
         QuestionExample example=new QuestionExample();
         example.createCriteria().andCreatorEqualTo(userId);
         Integer totalCount = (int)questionMapper.countByExample(example);
@@ -77,7 +89,7 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }
-        pageDTO.setQuestionDTOList(questionDTOList);
+        pageDTO.setData(questionDTOList);
         return pageDTO;
     }
 

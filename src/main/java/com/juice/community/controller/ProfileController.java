@@ -1,6 +1,7 @@
 package com.juice.community.controller;
 import com.juice.community.dto.PageDTO;
 import com.juice.community.model.User;
+import com.juice.community.service.NotificationService;
 import com.juice.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 public class ProfileController {
     @Autowired(required = false)
     private QuestionService questionService;
+    @Autowired(required = false)
+    private NotificationService notificationService;
     @GetMapping("/profile/{action}") /*访问profile会调用此方法*/
     public String profile(@PathVariable(name="action") String action, Model model, HttpServletRequest request,
                           @RequestParam(value = "page",defaultValue = "1")Integer page, //当前页码
@@ -24,14 +27,21 @@ public class ProfileController {
             return "redirect:/"; //未登录就返回首页
         }
 
-        PageDTO pageDTO = questionService.getQuestionListByUser(user.getId(), page, size);//根据用户的id查找他发布了多少问题
-        model.addAttribute("pages",pageDTO);//添加至页面的model中，那边调用就可
+
         if("questions".equals(action)){
+            PageDTO pageDTO = questionService.getQuestionListByUser(user.getId(), page, size);//根据用户的id查找他发布了多少问题
+            model.addAttribute("pages",pageDTO);//添加至页面的model中，那边调用就可
             model.addAttribute("section","questions");
             model.addAttribute("sectionName","我的问题");
+
         }else if("replies".equals(action)){
+            PageDTO pageDTO=notificationService.list(user.getId(),page,size);
+            Long unreadCount=notificationService.unreadCount(user.getId());
+            model.addAttribute("pages",pageDTO);//添加至页面的model中，那边调用就可
             model.addAttribute("section","replies");
             model.addAttribute("sectionName","最新回复");
+            model.addAttribute("unreadCount",unreadCount );
+
         }
         return "profile";
     }
